@@ -112,7 +112,7 @@
             //alert(JSON.stringify(data));
             if(data.status == 1){
               var nums = data.data.nums;
-              $('#nums').html(data.data.signins.nums);
+              $('#nums').html(nums);
               $('.tel-container').addClass('hide');
               setTimeout(function(){
                   $('.code').removeClass('hide');
