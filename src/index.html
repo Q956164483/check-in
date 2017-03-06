@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=0.1">
+    <title>签到</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body class="box box-ver">
+    <div id="app" class="container box box-ver box-pc box-ac">
+      <!-- <div class="header"></div> -->
+      <div class="tel-container box box-ver box-ac box-pc box-fh hide">
+        <input id="company" type="text" placeholder="请输入公司名称" maxlength="20" >
+        <input id="dutys" type="text" placeholder="请输入职务" maxlength="15">
+        <input id="name" type="text" placeholder="请输入姓名" maxlength="6" >
+        <input id="tel" type="tel" placeholder="请输入手机号" maxlength="11">
+        <a href="javascript:" class="button box box-ac box-pc" data-type="0">签到</a>
+      </div>
+      <div class="code box box-ac box-pc hide box-ver">
+        <div >您已签到，第<span id="nums"></span>个签到</div>
+        <img src="images/code.jpg" alt="">
+      </div>
+    </div>
+    <div class="toast hide"></div>
+    <script src="js/concat.js"></script>
+</body>
+<script>
+    function closeToast(){
+        $('.toast').addClass('hide');
+    }
+    function openToast(msg,time){
+      $('.toast').html(msg).removeClass('hide');
+      if(time){
+          setTimeout(function(){
+              closeToast();
+          },time)
+      }
+    }
+    /**
+     * 链接后面的参数
+     */
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    getUserInfo();
+    var is_signins = 0;
+    function getUserInfo(){
+        var code = getQueryString('code');
+        //alert(code);
+        $.ajax({
+            type: 'GET',
+            url: 'http://text.dmooo.xyz/signin/get_weixin_access_token?code='+code+'&signin_id=1',
+            dataType: 'json',
+            timeout: 10000,
+            success: function(data){
+              if(data.status == 1){
+                is_signins = data.data.is_signins;
+                if(is_signins == 1){
+                  //openToast('您已经签到过啦',2000);
+                  $('#nums').html(data.data.signins.nums);
+                  $('.code').removeClass('hide');
+                }else{
+                  $('.tel-container').removeClass('hide');
+                }
+              }
+            },
+            error: function(xhr, type){
+                openToast('网络故障',2000);
+            }
+        })
+    }
+    $('.button').on('click',function(){
+      var company = $('#company').val();
+      var dutys = $('#dutys').val();
+      var name = $('#name').val();
+      var tel = $('#tel').val();
+      if(company.length<2){ 
+        openToast('请填写有效的公司名',2000);
+        $('#company').focus(); 
+        return false; 
+      }
+      if(dutys.length<2){ 
+        openToast('请填写有效的职务',2000);
+        $('#dutys').focus(); 
+        return false; 
+      }
+      if(name.length<2){ 
+        openToast('请填写有效的姓名',2000);
+        $('#name').focus(); 
+        return false; 
+      }
+      if(!(/^1[34578]\d{9}$/.test(tel))){ 
+        openToast('请填写有效的手机号',2000);
+        $('#tel').focus(); 
+        return false; 
+      }
+      $.ajax({
+          type: 'POST',
+          url: 'http://text.dmooo.xyz/signin/weixin_phone',
+          dataType: 'json',
+          timeout: 10000,
+          data:{
+            company:company,
+            dutys:dutys,
+            phone:tel,
+            realname:name,
+            signin_id:1
+          },
+          success: function(data){
+            //alert(JSON.stringify(data));
+            if(data.status == 1){
+              var nums = data.data.nums;
+              $('#nums').html(data.data.signins.nums);
+              $('.tel-container').addClass('hide');
+              setTimeout(function(){
+                  $('.code').removeClass('hide');
+              },1);
+            }else{
+              openToast(data.message,2000);
+            }
+          },
+          error: function(xhr, type){
+              openToast('错误,签到失败',2000);
+          }
+      })
+    })
+
+</script>
+</html>

@@ -1,0 +1,59 @@
+@import "reset";
+@import "mixins";
+@import "box";
+html,body,.container{
+	width:100%;
+	height:100%;
+}
+.container{
+	@include bcImg();
+	background-image:url("../images/bg.jpg");
+}
+.header{
+	width:30%;
+	padding-bottom:30%;
+	border-radius:50%;
+	background-color:#EEE;
+}
+.button,input{
+	display:block;
+	outline:none;
+	text-align:center;
+	background-color:#FFF;
+	width:60%;
+	height:2.2rem;
+	line-height:2rem;
+	border-radius:.4rem;
+	margin-top:1rem;
+	color:#999;
+}
+.button{
+	text-decoration:none;
+	background-color:#43CD80;
+	color:#FFF;
+}
+.code{
+	color:#FFF;
+	width:70%;
+	text-align:center;
+	margin-top:2rem;
+	img{
+		width:100%;
+		height:auto;
+	}
+}
+#nums{
+	color:red;
+}
+.toast{
+  position: fixed;
+  padding:.8rem;
+  border-radius:.2rem;
+  background-color: rgba(0,0,0,0.8);
+  color:#FFF;
+  top:45%;
+  left:50%;
+  z-index: 888;
+  font-size: 1.2rem;
+  @include transform(translateX(-50%));
+}
