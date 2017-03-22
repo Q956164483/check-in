@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, minimum-scale=0.1">
-    <title>签到</title>
+    <title>湖北省女企业家协会第三次会员大会</title>
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body class="box box-ver">
@@ -11,7 +11,7 @@
       <!-- <div class="header"></div> -->
       <div class="tel-container box box-ver box-ac box-pc box-fh hide">
         <input id="company" type="text" placeholder="请输入公司名称" maxlength="20" >
-        <input id="dutys" type="text" placeholder="请输入职务" maxlength="15">
+        <!-- <input id="dutys" type="text" placeholder="请输入职务" maxlength="15"> -->
         <input id="name" type="text" placeholder="请输入姓名" maxlength="6" >
         <input id="tel" type="tel" placeholder="请输入手机号" maxlength="11">
         <a href="javascript:" class="button box box-ac box-pc" data-type="0">签到</a>
@@ -19,6 +19,7 @@
       <div class="code box box-ac box-pc hide box-ver">
         <div >您已签到，第<span id="nums"></span>个签到</div>
         <img src="images/code.jpg" alt="">
+        长按识别二维码加群
       </div>
     </div>
     <div class="toast hide"></div>
@@ -64,6 +65,8 @@
                 }else{
                   $('.tel-container').removeClass('hide');
                 }
+              }else{
+                openToast(data.message,2000);
               }
             },
             error: function(xhr, type){
@@ -73,7 +76,7 @@
     }
     $('.button').on('click',function(){
       var company = $('#company').val();
-      var dutys = $('#dutys').val();
+      //var dutys = $('#dutys').val();
       var name = $('#name').val();
       var tel = $('#tel').val();
       if(company.length<2){ 
@@ -81,11 +84,11 @@
         $('#company').focus(); 
         return false; 
       }
-      if(dutys.length<2){ 
-        openToast('请填写有效的职务',2000);
-        $('#dutys').focus(); 
-        return false; 
-      }
+      // if(dutys.length<2){ 
+      //   openToast('请填写有效的职务',2000);
+      //   $('#dutys').focus(); 
+      //   return false; 
+      // }
       if(name.length<2){ 
         openToast('请填写有效的姓名',2000);
         $('#name').focus(); 
@@ -103,7 +106,7 @@
           timeout: 10000,
           data:{
             company:company,
-            dutys:dutys,
+            //dutys:dutys,
             phone:tel,
             realname:name,
             signin_id:1
